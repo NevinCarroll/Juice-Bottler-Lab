@@ -13,7 +13,7 @@ import java.util.List;
  * Workers operate concurrently and pass Orange objects through
  * each stage of production using shared buffers and synchronization.
  */
-public class Plant {
+public class Plant implements Runnable {
 
     /**
      * Number of oranges required to produce one bottle of juice.
@@ -104,6 +104,11 @@ public class Plant {
         for (int i = 0; i < NUMBER_OF_BOTTLERS; i++) {
             bottlers[i] = new Worker(this, Orange.State.Bottled);
         }
+    }
+
+    @Override
+    public void run() {
+
     }
 
     /**
@@ -285,4 +290,5 @@ public class Plant {
     public int getWaste() {
         return orangesProcessed % ORANGES_PER_BOTTLE;
     }
+
 }

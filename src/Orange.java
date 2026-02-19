@@ -1,10 +1,10 @@
 /**
  * The Orange class represents a single orange moving through
  * the juice production pipeline.
- *
+ * <p>
  * Each orange progresses through a sequence of states:
- *  Fetched → Peeled → Squeezed → Bottled → Processed
- *
+ * Fetched → Peeled → Squeezed → Bottled → Processed
+ * <p>
  * Each state requires a simulated amount of time to complete,
  * represented using Thread.sleep().
  */
@@ -12,31 +12,45 @@ public class Orange {
 
     /**
      * Represents the processing stages of an orange.
-     *
+     * <p>
      * Each state stores the time (in milliseconds) required
      * to complete that stage.
      */
     public enum State {
 
-        /** Orange has been fetched from supply. */
+        /**
+         * Orange has been fetched from supply.
+         */
         Fetched(15),
 
-        /** Orange has been peeled. */
+        /**
+         * Orange has been peeled.
+         */
         Peeled(38),
 
-        /** Orange has been squeezed into juice. */
+        /**
+         * Orange has been squeezed into juice.
+         */
         Squeezed(29),
 
-        /** Juice has been bottled. */
+        /**
+         * Juice has been bottled.
+         */
         Bottled(17),
 
-        /** Orange has fully completed processing. */
+        /**
+         * Orange has fully completed processing.
+         */
         Processed(1);
 
-        /** Index of the final state in the enum. */
+        /**
+         * Index of the final state in the enum.
+         */
         private static final int finalIndex = State.values().length - 1;
 
-        /** Time in milliseconds required to complete this stage. */
+        /**
+         * Time in milliseconds required to complete this stage.
+         */
         final int timeToComplete;
 
         /**
@@ -65,12 +79,14 @@ public class Orange {
         }
     }
 
-    /** Current state of the orange in the processing pipeline. */
+    /**
+     * Current state of the orange in the processing pipeline.
+     */
     private State state;
 
     /**
      * Constructs a new Orange.
-     *
+     * <p>
      * A new orange starts in the Fetched state and
      * immediately simulates the time required for that stage.
      */
@@ -90,11 +106,11 @@ public class Orange {
 
     /**
      * Advances the orange to the next stage of processing.
-     *
+     * <p>
      * This method:
-     *  1. Validates the orange is not already fully processed.
-     *  2. Advances to the next state.
-     *  3. Simulates the time required for that stage.
+     * 1. Validates the orange is not already fully processed.
+     * 2. Advances to the next state.
+     * 3. Simulates the time required for that stage.
      *
      * @throws IllegalStateException if the orange is already processed.
      */
@@ -116,7 +132,7 @@ public class Orange {
     /**
      * Simulates the time required to complete the current stage
      * by putting the thread to sleep.
-     *
+     * <p>
      * If interrupted, a warning message is printed.
      */
     private void doWork() {

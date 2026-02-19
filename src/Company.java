@@ -1,7 +1,7 @@
 /**
  * The Company class simulates a juice company that operates multiple
  * orange processing plants for a fixed amount of time.
- *
+ * <p>
  * Each plant runs concurrently, processes oranges into bottles,
  * and tracks production statistics. After the processing time ends,
  * the plants are stopped and a summary report is printed.
@@ -18,11 +18,11 @@ public class Company {
     /**
      * The total number of plants the company operates.
      */
-    private static final int NUM_PLANTS = 10;
+    private static final int NUM_PLANTS = 2;
 
     /**
      * Main entry point of the program.
-     *
+     * <p>
      * This method:
      * 1. Creates and starts all plants.
      * 2. Allows them to run for a fixed duration.
@@ -78,7 +78,7 @@ public class Company {
 
     /**
      * Causes the current thread to sleep for the specified amount of time.
-     *
+     * <p>
      * This method ensures the sleep time is at least 1 millisecond
      * to avoid invalid sleep durations.
      *
