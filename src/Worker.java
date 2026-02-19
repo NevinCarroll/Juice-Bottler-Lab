@@ -1,48 +1,109 @@
+/**
+ * The Worker class represents a single worker in a plant.
+ *
+ * Each worker operates in its own thread and is responsible for
+ * one stage of the orange processing pipeline:
+ *  - Fetching
+ *  - Peeling
+ *  - Squeezing
+ *  - Bottling
+ *
+ * Workers continuously:
+ *  1. Request an orange from the plant.
+ *  2. Process the orange.
+ *  3. Return the orange to the next production stage.
+ *
+ * The worker stops when it is signaled and the working flag becomes false.
+ */
 public class Worker implements Runnable {
 
-    /**
-     * Worker requests orange from plant,
-     * then search through there, then returns orange and index,
-     * then returns it when done
-     */
-
+    /** Indicates whether this worker should continue running. */
     private boolean working = false;
-    private final Plant plant;
-    private final Thread thread;
-    private final Orange.State orangeState; // The state the worker will work on
 
+    /** Reference to the plant this worker belongs to. */
+    private final Plant plant;
+
+    /** The thread executing this worker. */
+    private final Thread thread;
+
+    /** The production stage this worker is responsible for. */
+    private final Orange.State orangeState;
+
+    /**
+     * Constructs a Worker assigned to a specific plant and production stage.
+     *
+     * @param plant       The plant this worker operates in.
+     * @param orangeState The stage of processing this worker performs.
+     */
     Worker(Plant plant, Orange.State orangeState) {
         this.plant = plant;
         this.orangeState = orangeState;
+
+        // Create a new thread that will execute this worker's run() method
         thread = new Thread(this);
     }
 
+    /**
+     * The main execution loop of the worker thread.
+     *
+     * While working is true:
+     *  1. Request an orange from the plant.
+     *  2. If an orange is available, process it.
+     *  3. Return it to the next stage of production.
+     *
+     * The loop exits when stopWork() sets working to false.
+     */
     @Override
     public void run() {
         while (working) {
-            Orange orange = plant.requestOrange();
 
+            // Request an orange at this worker's production stage
+            Orange orange = plant.requestOrange(orangeState);
+
+            // If an orange was successfully retrieved, process it
             if (orange != null) {
+
+                // Perform this stage's work on the orange
                 orange.runProcess();
-                plant.returnOrange(orange);
+
+                // Return the orange to the plant for the next stage
+                plant.returnOrange(orange, orangeState);
             }
         }
     }
 
+    /**
+     * Starts the worker's thread and begins processing.
+     *
+     * This method:
+     *  1. Sets working to true.
+     *  2. Starts the thread, which calls run().
+     */
     public void startWork() {
         working = true;
         thread.start();
     }
 
+    /**
+     * Signals the worker to stop processing.
+     *
+     * The thread will finish its current iteration
+     * and then exit the run loop.
+     */
     public void stopWork() {
         working = false;
     }
 
+    /**
+     * Waits for this worker's thread to terminate.
+     *
+     * Ensures clean shutdown of all worker threads.
+     */
     public void waitToStop() {
         try {
             thread.join();
         } catch (InterruptedException ignored) {
+            // Ignore interruption during shutdown
         }
     }
-
 }
