@@ -283,12 +283,12 @@ public class Plant implements Runnable {
     }
 
     /**
-     * Calculates leftover oranges that did not form a full bottle.
+     * Calculates leftover oranges that did not form a full bottle, and oranges that were not fully processed.
      *
      * @return Number of wasted oranges.
      */
     public int getWaste() {
-        return orangesProcessed % ORANGES_PER_BOTTLE;
+        return orangesProcessed % ORANGES_PER_BOTTLE + (orangesProvided - orangesProcessed);
     }
 
 }
