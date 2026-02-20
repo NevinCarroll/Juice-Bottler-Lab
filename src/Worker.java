@@ -17,24 +17,16 @@
  */
 public class Worker implements Runnable {
 
-    /**
-     * Indicates whether this worker should continue running.
-     */
+    // Indicates whether this worker should continue running.
     private boolean working = false;
 
-    /**
-     * Reference to the plant this worker belongs to.
-     */
+    // Reference to the plant this worker belongs to.
     private final Plant plant;
 
-    /**
-     * The thread executing this worker.
-     */
+    // The thread executing this worker.
     private final Thread thread;
 
-    /**
-     * The production stage this worker is responsible for.
-     */
+    // The production stage this worker is responsible for.
     private final Orange.State orangeState;
 
     /**

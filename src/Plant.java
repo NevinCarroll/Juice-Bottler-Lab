@@ -13,65 +13,48 @@ import java.util.List;
  * Workers operate concurrently and pass Orange objects through
  * each stage of production using shared buffers and synchronization.
  */
-public class Plant implements Runnable {
+public class Plant {
 
-    /**
-     * Number of oranges required to produce one bottle of juice.
-     */
+    // Number of oranges required to produce one bottle of juice.
     private final int ORANGES_PER_BOTTLE = 3;
 
-    /**
-     * Number of workers per production stage.
-     */
+    // Number of workers per production stage.
     private final int NUMBER_OF_FETCHERS = 2;
     private final int NUMBER_OF_PEELERS = 3;
     private final int NUMBER_OF_SQUEEZERS = 3;
     private final int NUMBER_OF_BOTTLERS = 2;
 
-    /**
-     * Worker arrays for each production stage.
-     */
+    // Worker arrays for each production stage.
     private final Worker[] fetchers;
     private final Worker[] peelers;
     private final Worker[] squeezers;
     private final Worker[] bottlers;
 
-    /**
-     * Total oranges supplied to this plant.
-     */
+    //Total oranges supplied to this plant.
     private volatile int orangesProvided;
 
-    /**
-     * Total oranges fully processed (bottled).
-     */
+    // Total oranges fully processed (bottled).
     private volatile int orangesProcessed;
 
-    /**
-     * Buffers between production stages.
-     */
+    // Buffers between production stages.
     private final List<Orange> peeledOranges;
     private final List<Orange> squeezedOranges;
     private final List<Orange> bottledOranges;
 
-    /**
-     * Locks used to synchronize access between stages.
-     */
+    //Locks used to synchronize access between stages.
     private final Object fetchLock = new Object();
     private final Object peelLock = new Object();
     private final Object squeezeLock = new Object();
     private final Object bottleLock = new Object();
     private final Object processedLock = new Object();
 
-    /**
-     * Indicates whether the plant is actively running.
-     */
+    // Indicates whether the plant is actively running.
     private volatile boolean running = true;
 
     /**
      * Constructs a Plant and initializes all worker threads.
      *
-     * @param threadNum Identifier for the plant (not currently stored,
-     *                  but may be used for debugging/logging).
+     * @param threadNum Identifier for the plant
      */
     Plant(int threadNum) {
 
@@ -104,11 +87,6 @@ public class Plant implements Runnable {
         for (int i = 0; i < NUMBER_OF_BOTTLERS; i++) {
             bottlers[i] = new Worker(this, Orange.State.Bottled);
         }
-    }
-
-    @Override
-    public void run() {
-
     }
 
     /**
@@ -186,13 +164,14 @@ public class Plant implements Runnable {
             }
         } else if (state == Orange.State.Peeled) {
             synchronized (peelLock) {
+                // Wait if there is no orange and the plant is still running
                 while (peeledOranges.isEmpty() && running) {
                     try {
                         peelLock.wait();
                     } catch (InterruptedException ignored) {
                     }
                 }
-                if (!peeledOranges.isEmpty()) {
+                if (!peeledOranges.isEmpty()) { // Grab first orange if one is available
                     foundOrange = peeledOranges.removeFirst();
                 }
             }
@@ -236,6 +215,7 @@ public class Plant implements Runnable {
      */
     public void returnOrange(Orange orange, Orange.State state) {
 
+        // Add orange to list and notify all workers waiting in that lock for an available orange
         if (state == Orange.State.Fetched) {
             synchronized (peelLock) {
                 peeledOranges.add(orange);

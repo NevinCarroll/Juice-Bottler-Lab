@@ -79,9 +79,7 @@ public class Orange {
         }
     }
 
-    /**
-     * Current state of the orange in the processing pipeline.
-     */
+    // Current state of the orange in the processing pipeline.
     private State state;
 
     /**

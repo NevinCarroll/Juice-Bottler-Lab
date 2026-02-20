@@ -8,17 +8,15 @@
  */
 public class Company {
 
-    /**
-     * The total time (in milliseconds) that all plants
-     * should run before being shut down.
-     * Currently set to 5 seconds.
-     */
+    // The total time (in milliseconds) that all plants
+    // should run before being shut down.
+
     public static final long PROCESSING_TIME = 5 * 1000;
 
-    /**
-     * The total number of plants the company operates.
-     */
-    private static final int NUM_PLANTS = 2;
+
+    // The total number of plants the company operates.
+
+    private static final int NUM_PLANTS = 10;
 
     /**
      * Main entry point of the program.
@@ -30,7 +28,7 @@ public class Company {
      * 4. Waits for shutdown to complete.
      * 5. Prints a production summary.
      *
-     * @param args Command-line arguments (not used).
+     * @param args Command-line arguments
      */
     public static void main(String[] args) {
 
@@ -40,7 +38,7 @@ public class Company {
         // Initialize and start each plant
         for (int i = 0; i < NUM_PLANTS; i++) {
             plants[i] = new Plant(i);   // Create plant with ID i
-            plants[i].startPlant();     // Begin plant operation (likely starts a thread)
+            plants[i].startPlant();     // Begin plant operation
         }
 
         // Allow plants to run for the designated processing time
